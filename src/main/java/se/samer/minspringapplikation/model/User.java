@@ -1,5 +1,6 @@
 package se.samer.minspringapplikation.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +29,10 @@ public class User {
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonManagedReference
     private Set<Role> roles = new HashSet<>();
 
-    // Lägg till en metod för att hantera roller
+    // Metod för att hantera roller
     public void addRole(Role role) {
         this.roles.add(role);
     }

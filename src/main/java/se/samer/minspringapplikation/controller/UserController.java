@@ -1,5 +1,7 @@
 package se.samer.minspringapplikation.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.samer.minspringapplikation.model.User;
 import se.samer.minspringapplikation.service.UserService;
@@ -26,9 +28,23 @@ public class UserController {
         return userService.findUserById(id);
     }
 
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.saveUser(user);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
     @PostMapping("/role/{roleId}")
-    public User createUserWithRole(@RequestBody User user, @PathVariable Long roleId) {
-        return userService.saveUserWithRole(user, roleId);
+    public ResponseEntity<User> createUserWithRole(@RequestBody User user, @PathVariable Long roleId) {
+        User createdUser = userService.saveUserWithRole(user, roleId);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{userId}/roles/{roleId}")
+    public ResponseEntity<User> addRoleToUser(@PathVariable Long userId, @PathVariable Long roleId) {
+        User user = userService.findUserById(userId);
+        User updatedUser = userService.saveUserWithRole(user, roleId);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
