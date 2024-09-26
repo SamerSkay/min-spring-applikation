@@ -7,7 +7,7 @@ import se.samer.minspringapplikation.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -26,9 +26,9 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    @PostMapping("/role/{roleId}")
+    public User createUserWithRole(@RequestBody User user, @PathVariable Long roleId) {
+        return userService.saveUserWithRole(user, roleId);
     }
 
     @DeleteMapping("/{id}")
