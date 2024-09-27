@@ -40,7 +40,7 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{userId}/roles/{roleId}")
+    @PutMapping("/{userId}/roles/{roleId}")
     public ResponseEntity<User> addRoleToUser(@PathVariable Long userId, @PathVariable Long roleId) {
         User user = userService.findUserById(userId);
         User updatedUser = userService.saveUserWithRole(user, roleId);

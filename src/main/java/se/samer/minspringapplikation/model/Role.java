@@ -1,6 +1,7 @@
 package se.samer.minspringapplikation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,6 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    @JsonBackReference
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }
