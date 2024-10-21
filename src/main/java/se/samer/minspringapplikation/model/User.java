@@ -38,4 +38,14 @@ public class User {
         this.roles.add(role);
     }
 
+    // Implementera toString() metoden
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }
