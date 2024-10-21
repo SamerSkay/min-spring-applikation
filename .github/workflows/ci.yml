@@ -33,23 +33,21 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-            
-            # Steg för att ladda upp till S3
-                        - name: Upload to S3
-                        run: |
-                        aws s3 cp target/minspringapp.jar s3://minspringapp-deploy-bucket/minspringapp.jar
 
-            # Steg för att skapa en applikationsversion i Elastic Beanstalk
-                        - name: Create Elastic Beanstalk Application Version
-                          run: |
-                            aws elasticbeanstalk create-application-version --application-name minspringapp \
-                              --version-label ${{ github.sha }} \
-                              --source-bundle S3Bucket=minspringapp-deploy-bucket,S3Key=minspringapp.jar
-        
+      # Steg för att ladda upp till S3
+      - name: Upload to S3
+        run: |
+          aws s3 cp target/minspringapp.jar s3://minspringapp-deploy-bucket/minspringapp.jar
 
-        # Steg för att uppdatera Elastic Beanstalk-miljön
+      # Steg för att skapa en applikationsversion i Elastic Beanstalk
+      - name: Create Elastic Beanstalk Application Version
+        run: |
+          aws elasticbeanstalk create-application-version --application-name minspringapp \
+            --version-label ${{ github.sha }} \
+            --source-bundle S3Bucket=minspringapp-deploy-bucket,S3Key=minspringapp.jar
+
+      # Steg för att uppdatera Elastic Beanstalk-miljön
       - name: Update Elastic Beanstalk Environment
         run: |
           aws elasticbeanstalk update-environment --environment-name minspringapp-env \
             --version-label ${{ github.sha }}
-          
