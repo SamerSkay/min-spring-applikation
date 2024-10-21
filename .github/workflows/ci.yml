@@ -38,3 +38,17 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp target/min-spring-applikation-0.0.1-SNAPSHOT.jar s3://minspringapp-deploy-bucket/minspringapp.jar
+          
+           # Steg för att skapa en applikationsversion i Elastic Beanstalk
+      - name: Create Elastic Beanstalk Application Version
+        run: |
+          aws elasticbeanstalk create-application-version --application-name minspringapp \
+            --version-label ${{ github.sha }} \
+            --source-bundle S3Bucket=your-app-bucket,S3Key=minspringapp.jar
+
+      # Steg för att uppdatera Elastic Beanstalk-miljön
+      - name: Update Elastic Beanstalk Environment
+        run: |
+          aws elasticbeanstalk update-environment --environment-name minspringapp-env \
+            --version-label ${{ github.sha }}
+          
