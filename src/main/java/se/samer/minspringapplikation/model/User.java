@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -30,7 +31,6 @@ public class User {
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     // Metod för att hantera roller
@@ -38,14 +38,14 @@ public class User {
         this.roles.add(role);
     }
 
-    // Implementera toString() metoden
+    // toString() metoden
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", roles=" + roles +
+                ", roles= " + roles.stream().map(Role::getName).collect(Collectors.joining(", ")) +
                 '}';
     }
 }

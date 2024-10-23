@@ -24,4 +24,9 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
     private Set<User> users = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Role{id=" + id + ", name='" + name + "'}";
+    }
 }
