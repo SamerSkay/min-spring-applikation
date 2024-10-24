@@ -1,5 +1,7 @@
 package se.samer.minspringapplikation.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.samer.minspringapplikation.model.Role;
 import se.samer.minspringapplikation.service.RoleService;
@@ -30,6 +32,23 @@ public class RoleController {
     public Role createRole(@RequestBody Role role) {
         return roleService.saveRole(role);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role roleDetails) {
+        Role role = roleService.findRoleById(id);
+
+        if (role == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Uppdatera rollens namn
+        role.setName(roleDetails.getName());
+
+        // Spara den uppdaterade rollen
+        Role updatedRole = roleService.saveRole(role);
+        return ResponseEntity.ok(updatedRole);
+    }
+
 
     @DeleteMapping("/{id}")
     public void deleteRole(@PathVariable Long id) {
