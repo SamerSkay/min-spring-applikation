@@ -88,11 +88,28 @@ public class ApiClient {
         }
     }
 
+    public void updateRole(Long id, String newName) {
+        Role updatedRole = new Role();
+        updatedRole.setName(newName);
+        restTemplate.put(BASE_ROLES_URL + "/" + id, updatedRole);
+        System.out.println("Updated Role with ID: " + id);
+    }
+
+    public void deleteRole(Long id) {
+        restTemplate.delete(BASE_ROLES_URL + "/" + id);
+        System.out.println("Deleted Role with ID: " + id);
+    }
+
     /////////////////////////// KOPPLA ANVÄNDARE OCH ROLLER /////////////////////////////////////
 
     public void addRoleToUser(Long userId, Long roleId) {
         restTemplate.put(BASE_USERS_URL + "/" + userId + "/roles/" + roleId, null);
         System.out.println("Added role with ID: " + roleId + " to user with ID: " + userId);
+    }
+
+    public void removeRoleFromUser(Long userId, Long roleId) {
+        restTemplate.delete(BASE_USERS_URL + "/" + userId + "/roles/" + roleId);
+        System.out.println("Removed role with ID: " + roleId + " from user with ID: " + userId);
     }
 
     /////////////////////////// KONSOLPROGRAM /////////////////////////////////////
@@ -110,8 +127,11 @@ public class ApiClient {
             System.out.println("5. Delete User");
             System.out.println("6. Create Role");
             System.out.println("7. Get All Roles");
-            System.out.println("8. Add Role to User");
-            System.out.println("9. Exit");
+            System.out.println("8. Update Role");
+            System.out.println("9. Delete Role"); // Nytt alternativ för att ta bort roller
+            System.out.println("10. Add Role to User");
+            System.out.println("11. Remove Role from User");
+            System.out.println("12. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Clear the buffer
@@ -156,13 +176,33 @@ public class ApiClient {
                     client.getAllRoles();
                     break;
                 case 8:
+                    System.out.print("Enter Role ID to update: ");
+                    Long roleIdToUpdate = scanner.nextLong();
+                    scanner.nextLine(); // Clear the buffer
+                    System.out.print("Enter new role name: ");
+                    String newRoleName = scanner.nextLine();
+                    client.updateRole(roleIdToUpdate, newRoleName);
+                    break;
+                case 9: // Nytt alternativ för att ta bort roller
+                    System.out.print("Enter Role ID to delete: ");
+                    Long roleIdToDelete = scanner.nextLong();
+                    client.deleteRole(roleIdToDelete);
+                    break;
+                case 10:
                     System.out.print("Enter User ID: ");
                     Long userToAddRole = scanner.nextLong();
                     System.out.print("Enter Role ID: ");
                     Long roleIdToAdd = scanner.nextLong();
                     client.addRoleToUser(userToAddRole, roleIdToAdd);
                     break;
-                case 9:
+                case 11:
+                    System.out.print("Enter User ID: ");
+                    Long userToRemoveRole = scanner.nextLong();
+                    System.out.print("Enter Role ID: ");
+                    Long roleIdToRemove = scanner.nextLong();
+                    client.removeRoleFromUser(userToRemoveRole, roleIdToRemove);
+                    break;
+                case 12:
                     System.out.println("Exiting...");
                     return;
                 default:
